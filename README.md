@@ -1,17 +1,6 @@
 SafariViewController Cordova Plugin
 ===================================
-
-[![NPM version][npm-image]][npm-url]
-[![Downloads][downloads-image]][npm-url]
-[![TotalDownloads][total-downloads-image]][npm-url]
-[![Twitter Follow][twitter-image]][twitter-url]
-
-[npm-image]:http://img.shields.io/npm/v/cordova-plugin-safariviewcontroller.svg
-[npm-url]:https://npmjs.org/package/cordova-plugin-safariviewcontroller
-[downloads-image]:http://img.shields.io/npm/dm/cordova-plugin-safariviewcontroller.svg
-[total-downloads-image]:http://img.shields.io/npm/dt/cordova-plugin-safariviewcontroller.svg?label=total%20downloads
-[twitter-image]:https://img.shields.io/twitter/follow/eddyverbruggen.svg?style=social&label=Follow%20me
-[twitter-url]:https://twitter.com/eddyverbruggen
+by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 
 ## 0. Index
 
@@ -28,7 +17,6 @@ SafariViewController Cordova Plugin
 * Use the new and powerful iOS9 viewcontroller to show webcontent in your PhoneGap app
 * Requires XCode 7 / iOS9 SDK to build
 * Requires iOS9 to use, lower versions need to fall back to InAppBrowser (example below!)
-* [Chrome custom tabs](https://developer.chrome.com/multidevice/android/customtabs) are Android's parallel to SafariViewController with even more customizable UI. You can give it a try with the latest version of this plugin. See [the wiki](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/wiki) for details.
 
 Note that I didn't decide to clobber window.open to override InAppBrowser when applicable
 because that would mean you could never use InAppBrowser in case you need its advanced features
@@ -51,11 +39,6 @@ This one has a custom `tintColor` (check the buttons):
 
 <img src="screenshots/07-tintColor.PNG" width="350"/>
 
-On iOS 10, you can use `barColor` and `controlTintColor` as well
-(to make sure iOS 9 buttons are not white in the case, pass in a `tintColor` as well):
-
-<img src="screenshots/08-barColor.PNG" width="350"/>
-
 ## 3. Installation
 To install the plugin with the Cordova CLI from npm:
 
@@ -63,11 +46,7 @@ To install the plugin with the Cordova CLI from npm:
 $ cordova plugin add cordova-plugin-safariviewcontroller
 ```
 
-*Note*: the plugin requires Cordova Android 7.0.0 or later.
-
 ### Graceful fallback to InAppBrowser
-** This section is kinda obsolete by now (with iOS 12 currently being the latest version) **
-
 Since SafariViewController is new in iOS9 you need to have a fallback for older versions (and other platforms),
 so if `available` returns false (see the snippet below) you want to open the URL in the InAppBrowser probably,
 so be sure to include that plugin as well:
@@ -76,7 +55,7 @@ so be sure to include that plugin as well:
 $ cordova plugin add cordova-plugin-inappbrowser
 ```
 
-I'm not including it as a dependency as not all folks may have this requirement.
+I'm not including it as a depency as not all folks may have this requirement.
 
 ## 4. Usage
 Check the [demo code](demo/index.html) for an easy to drop in example, otherwise copy-paste this:
@@ -91,9 +70,7 @@ function openUrl(url, readerMode) {
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
             transition: 'curl', // (this only works in iOS 9.1/9.2 and lower) unless animated is false you can choose from: curl, flip, fade, slide (default)
             enterReaderModeIfAvailable: readerMode, // default false
-            tintColor: "#00ffff", // default is ios blue
-            barColor: "#0000ff", // on iOS 10+ you can change the background color as well
-            controlTintColor: "#ffffff" // on iOS 10+ you can override the default tintColor
+            tintColor: "#ff0000" // default is ios blue
           },
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
@@ -124,6 +101,7 @@ function dismissSafari() {
 * InAppBrowser uses the slow UIWebView (even when you're using a WKWebView plugin!), this plugin uses the ultra fast Safari Webview.
 * This is now Apple's recommended way to use a browser in your app.
 * A nicer / cleaner UI which is consistent with Safari and all other apps using a `SFSafariViewController`.
+* Since this is the system's main browser, assets like cookies are shared with your app, so the user is still logged on in his favorite websites.
 * Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.
 * Since iOS 9.2 or 9.3 you can swipe to go back to your app. Unfortunately, in favor of this Apple dropped the option to provide a custom transition (curl/flip/..) when presenting Safari.
 
@@ -140,7 +118,7 @@ Do this:
 1. Install the [Custom URL Scheme Plugin](https://github.com/EddyVerbruggen/Custom-URL-scheme)
 2. Create a web page that reads Safari data on load and passes that data to the URL scheme:
 
-    ```html
+    ```javascript
     <html>
       <head>
         <script type="javascript">
@@ -158,7 +136,7 @@ Do this:
 
 3. Open the web page you created with a hidden Safari view:
 
-    ```js
+    ```javascript
     SafariViewController.show({
       url: 'http://mycoolapp.com/hidden.html',
       hidden: true,
@@ -168,11 +146,11 @@ Do this:
 
 4. Capture the data passed from the web page via the URL Scheme:
 
-    ```js
+    ```javascript
     function handleOpenURL(url) {
       setTimeout(function() {
         SafariViewController.hide();
-        var data = decodeURIComponent(url.substr(url.indexOf('=')+1));
+        var data = decodeURIComponenturl.substr(url.indexOf('=')+1));
         console.log('Browser data received: ' + data);
       }, 0);
     }
@@ -180,9 +158,7 @@ Do this:
 
 
 ## 7. Changelog
-* 1.6.0 A few changes for Android. See [these closed issues](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/milestone/7?closed=1).
-* 1.5.3 Hidden tabs don't get removed on `hide()` (iOS). Thanks #104!
-* 1.4.3 Options weren't correctly passed to native code. Thanks #19!
+* 1.4.3 Options weren't correctly passed to native code. THanks #19!
 * 1.4.2 When passing a URL not starting with http/https the error callback will be invoked.
 * 1.4.1 You can now set the color of the navbar and tabbar buttons. Thanks #16!
 * 1.4.0 Added a `hidden` property to `show`.
